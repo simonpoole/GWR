@@ -6,6 +6,8 @@ use DBI;
 #use String::Approx qw(amatch asubstitute);
 use Text::Levenshtein qw(distance);
 
+binmode(STDOUT, ":utf8");
+
 my $polygon = -1;
 my $muni_ref = -1;
 my $canton = "";
@@ -97,6 +99,7 @@ while(my $aref = $ah->fetchrow_hashref())
 			print "<tr><td>",$canton,"</td><td><A HREF=\"", $canton,"/",$muni_ref,".html\">",$muni_name, "</A> <A HREF=\"http://qa.poole.ch/?osm_id=",$polygon,"\" target=\"noname map\">m</A></td><td>", $muni_ref,"</td>"; 
 			mkdir $canton;
 			open MH, ">$canton/$muni_ref.html";
+			binmode(MH, ":utf8");
 			$first_polygon = 0;
 		}
 
