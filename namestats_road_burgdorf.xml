@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" maximum-extent="646440.68,5736119.69,1194143.11,6110057.76">
+
+
+<Style name="muni_p" filter-mode="first" >
+  <Rule>
+    <Filter>([match_road] &gt;= 80) and ([match_road] &lt; 90)</Filter>
+    <PolygonSymbolizer fill="#ff8800" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 70) and ([match_road] &lt; 80)</Filter>
+    <PolygonSymbolizer fill="#ff7700" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 60) and ([match_road] &lt; 70)</Filter>
+    <PolygonSymbolizer fill="#ff6600" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 50) and ([match_road] &lt; 60)</Filter>
+    <PolygonSymbolizer fill="#ff5500" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 40) and ([match_road] &lt; 50)</Filter>
+    <PolygonSymbolizer fill="#ee0000" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 30) and ([match_road] &lt; 40)</Filter>
+    <PolygonSymbolizer fill="#dd0000" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 20) and ([match_road] &lt; 30)</Filter>
+    <PolygonSymbolizer fill="#cc0000" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 10) and ([match_road] &lt; 20)</Filter>
+    <PolygonSymbolizer fill="#bb0000" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 0) and ([match_road] &lt; 10)</Filter>
+    <PolygonSymbolizer fill="#aa0000" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 90)</Filter>
+    <PolygonSymbolizer fill="#889900" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] = -1)</Filter>
+    <PolygonSymbolizer fill="#444444" />
+  </Rule>
+  <Rule>
+    <PolygonSymbolizer fill="#bbbbbb" />
+  </Rule>
+</Style>
+<Style name="muni_p-outline" filter-mode="first" >
+  <Rule>
+    <LineSymbolizer stroke="#000000" stroke-width="1" stroke-linejoin="round" />
+  </Rule>
+</Style>
+<Layer name="muni_p"
+  srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+    <StyleName>muni_p-outline</StyleName>
+    <StyleName>muni_p</StyleName>
+    <Datasource>
+       <Parameter name="type"><![CDATA[postgis]]></Parameter>
+       <Parameter name="table"><![CDATA[(with aargau as (select way from planet_osm_polygon  where osm_id=-1686359) select p.name, p.way  as  pw ,m.match_road from planet_osm_polygon p, muni_name_stats m, aargau where admin_level = '8' and p.tags->'swisstopo:BFS_NUMMER'=cast(m.muni_ref as text) and p.tags->'swisstopo:KANTONSNUM'='19' and p.way @ aargau.way) as data]]></Parameter>
+       <Parameter name="extent"><![CDATA[646440.68,5736119.69,1194143.11,6110057.76]]></Parameter>
+       <Parameter name="key_field"><![CDATA[]]></Parameter>
+       <Parameter name="geometry_field"><![CDATA[pw]]></Parameter>
+       <Parameter name="dbname"><![CDATA[gis]]></Parameter>
+       <Parameter name="user"><![CDATA[www-data]]></Parameter>
+       <Parameter name="id"><![CDATA[muni_p]]></Parameter>
+       <Parameter name="project"><![CDATA[namestats]]></Parameter>
+       <Parameter name="srs"><![CDATA[+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over]]></Parameter>
+       <Parameter name="extent_cache"><![CDATA[auto]]></Parameter>
+    </Datasource>
+  </Layer>
+
+<Style name="water_p" filter-mode="first" >
+  <Rule>
+    <Filter>([waterway] = 'river')</Filter>
+    <LineSymbolizer stroke="#58888a" />
+    <PolygonSymbolizer fill="#58888a" />
+  </Rule>
+  <Rule>
+    <PolygonSymbolizer fill="#58888a" />
+  </Rule>
+</Style>
+<Layer name="water_p"
+  srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+    <StyleName>water_p</StyleName>
+    <Datasource>
+       <Parameter name="type"><![CDATA[postgis]]></Parameter>
+       <Parameter name="table"><![CDATA[(select p.waterway, p.way as pw from planet_osm_polygon p   ) as data]]></Parameter>
+       <Parameter name="extent"><![CDATA[646440.68,5736119.69,1194143.11,6110057.76]]></Parameter>
+       <Parameter name="key_field"><![CDATA[]]></Parameter>
+       <Parameter name="geometry_field"><![CDATA[pw]]></Parameter>
+       <Parameter name="dbname"><![CDATA[gis]]></Parameter>
+       <Parameter name="user"><![CDATA[www-data]]></Parameter>
+       <Parameter name="extent_cache"><![CDATA[auto]]></Parameter>
+       <Parameter name="id"><![CDATA[water_p]]></Parameter>
+       <Parameter name="project"><![CDATA[namestats]]></Parameter>
+       <Parameter name="srs"><![CDATA[+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over]]></Parameter>
+    </Datasource>
+  </Layer>
+
+</Map>
