@@ -67,6 +67,7 @@
        <Parameter name="extent"><![CDATA[646440.68,5736119.69,1194143.11,6110057.76]]></Parameter>
        <Parameter name="key_field"><![CDATA[]]></Parameter>
        <Parameter name="geometry_field"><![CDATA[pw]]></Parameter>
+<Parameter name="srid"><![CDATA[3857]]></Parameter>
        <Parameter name="dbname"><![CDATA[gis]]></Parameter>
        <Parameter name="user"><![CDATA[www-data]]></Parameter>
        <Parameter name="id"><![CDATA[muni_p]]></Parameter>
@@ -95,6 +96,7 @@
        <Parameter name="extent"><![CDATA[646440.68,5736119.69,1194143.11,6110057.76]]></Parameter>
        <Parameter name="key_field"><![CDATA[]]></Parameter>
        <Parameter name="geometry_field"><![CDATA[pw]]></Parameter>
+       <Parameter name="srid"><![CDATA[3857]]></Parameter>
        <Parameter name="dbname"><![CDATA[gis]]></Parameter>
        <Parameter name="user"><![CDATA[www-data]]></Parameter>
        <Parameter name="extent_cache"><![CDATA[auto]]></Parameter>
