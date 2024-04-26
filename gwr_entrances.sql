@@ -1,0 +1,19 @@
+CREATE TABLE gwr_entrances (
+	EGID bigint NOT NULL, 
+	EDID bigint NOT NULL, 
+	EGAID bigint NOT NULL, 
+	DEINR text, 
+	ESID integer NOT NULL, 
+	STRNAME text NOT NULL, 
+	STRNAMK text NOT NULL, 
+	STRINDX text NOT NULL, 
+	STRSP text NOT NULL, 
+	STROFFIZIEL BOOLEAN, 
+	DPLZ4 integer NOT NULL, 
+	DPLZZ integer NOT NULL, 
+	DPLZNAME text NOT NULL, 
+	DKODE numeric(12,3), 
+	DKODN numeric(12,3), 
+	DOFFADR BOOLEAN, 
+	DEXPDAT DATE NOT NULL
+);

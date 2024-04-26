@@ -41,7 +41,7 @@ print "<table class=\"sortable\">\n";
  
 print "<tr><th>Canton</th><th>Municipality</th><th>BFS Ref</th><th class=\"sorttable_numeric\">% match<br>overall</th><th class=\"sorttable_numeric\">% match<br>roads</th><th class=\"sorttable_numeric\">Typos</th><th class=\"sorttable_numeric\">OSM Roads</th><th class=\"sorttable_numeric\">OSM Areas</th><th class=\"sorttable_numeric\">OSM Nodes</th><th class=\"sorttable_numeric\">OSM Total</th><th class=\"sorttable_numeric\">GWR Roads</th><th class=\"sorttable_numeric\">GWR Areas</th><th class=\"sorttable_numeric\">GWR Points</th><th class=\"sorttable_numeric\">GWR none</th><th class=\"sorttable_numeric\">GWR unknown</th><th class=\"sorttable_numeric\">GWR Total</th><th>Exact match</th><th>Match dif. type</th><th>Match roads<br>dif. type</tr>";
 
-$ah = $dbh->prepare("select distinct canton, muni_ref from road_names  where official=1 order by canton, muni_ref");
+$ah = $dbh->prepare("select distinct canton, muni_ref from road_names  where official order by canton, muni_ref");
 $ah->execute();
 
 my $total_osm_road_count = 0;
@@ -169,7 +169,7 @@ while(my $aref = $ah->fetchrow_hashref())
 		open MH, ">$canton/$muni_ref.html";
 	}
 
-        $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref and official=1 order by name,plz4,plz2");
+        $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref and official order by name,plz4,plz2");
         $lh->execute();
 
 	my %GWR_names;
@@ -204,25 +204,20 @@ while(my $aref = $ah->fetchrow_hashref())
 		my $name_plz = "$name|$plz6";
 		my $geom = $lref->{'geom'};
 		$GWR_plz6{$name} = $plz6;
-		if ($geom eq '9801')
+		if ($geom eq 'Street')
 		{
                        	$GWR_names{$name_plz} = 'road';
 			$GWR_road_count++;
 		}
-		elsif ($geom eq '9802')
+		elsif ($geom eq 'Place')
 		{
                        	$GWR_names{$name_plz} = 'point';
 			$GWR_point_count++;
 		}
-		elsif ($geom eq '9803')
+		elsif ($geom eq 'Area')
 		{
                        	$GWR_names{$name_plz} = 'area';
 			$GWR_area_count++;
-		}
-		elsif ($geom eq '9809')
-		{
-                       	$GWR_names{$name_plz} = 'none';
-			$GWR_none_count++;
 		}
 		else
 		{
@@ -264,7 +259,7 @@ while(my $aref = $ah->fetchrow_hashref())
 	}
 	
 	my $typos = 0;
-        $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref and official=1 order by name,plz4,plz2");
+        $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref and official order by name,plz4,plz2");
         $lh->execute();
         while(my $lref = $lh->fetchrow_hashref()) 
 	{

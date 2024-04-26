@@ -39,9 +39,9 @@ print "<H3>Updated - ",(1900+$yearOffset),"-",(1+ $month),"-", $dayOfMonth,"</H3
 
 print "<table class=\"sortable\">\n";
  
-print "<tr><th>Canton</th><th>Municipality</th><th>BFS Ref</th><th class=\"sorttable_numeric\">% match<br>overall</th><th class=\"sorttable_numeric\">% match<br>roads</th><th class=\"sorttable_numeric\">Typos</th><th class=\"sorttable_numeric\">OSM Roads</th><th class=\"sorttable_numeric\">OSM Areas</th><th class=\"sorttable_numeric\">OSM Nodes</th><th class=\"sorttable_numeric\">OSM Total</th><th class=\"sorttable_numeric\">GWR Roads</th><th class=\"sorttable_numeric\">GWR Areas</th><th class=\"sorttable_numeric\">GWR Points</th><th class=\"sorttable_numeric\">GWR none</th><th class=\"sorttable_numeric\">GWR unknown</th><th class=\"sorttable_numeric\">GWR Total</th><th>Exact match</th><th>Match dif. type</th><th><small>Match OSM roads<br>GWR none</small></th><th><small>Match OSM roads<br>GWR unknown</small></th></tr>";
+print "<tr><th>Canton</th><th>Municipality</th><th>BFS Ref</th><th class=\"sorttable_numeric\">% match<br>overall</th><th class=\"sorttable_numeric\">% match<br>roads</th><th class=\"sorttable_numeric\">Typos</th><th class=\"sorttable_numeric\">OSM Roads</th><th class=\"sorttable_numeric\">OSM Areas</th><th class=\"sorttable_numeric\">OSM Nodes</th><th class=\"sorttable_numeric\">OSM Total</th><th class=\"sorttable_numeric\">GWR Roads</th><th class=\"sorttable_numeric\">GWR Areas</th><th class=\"sorttable_numeric\">GWR Points</th><th class=\"sorttable_numeric\">GWR none</th><th class=\"sorttable_numeric\">GWR unknown</th><th class=\"sorttable_numeric\">GWR Total</th><th>Exact match</th><th>Match dif. type</th><th><small>Match OSM roads<br>GWR none</small></th><th><small>Match OSM roads<br>GWR unknown</small></th><th class=\"sorttable_numeric\">Missing</th></tr>";
 
-$ah = $dbh->prepare("select distinct canton, muni_ref from road_names  where official=1 order by canton, muni_ref");
+$ah = $dbh->prepare("select distinct canton, muni_ref from road_names  where official order by canton, muni_ref");
 $ah->execute();
 
 my $total_osm_road_count = 0;
@@ -97,7 +97,7 @@ while(my $aref = $ah->fetchrow_hashref())
 		if ($first_polygon) 
 		{
 			$muni_name = $mref->{'name'};
-			print "<tr><td>",$canton,"</td><td><A HREF=\"", $canton,"/",$muni_ref,".html\">",$muni_name, "</A> <A HREF=\"http://qa.poole.ch/?osm_id=",$polygon,"\" target=\"noname map\">m</A></td><td>", $muni_ref,"</td>"; 
+			print "<tr><td>",$canton,"</td><td><A HREF=\"", $canton,"/",$muni_ref,".html\">",$muni_name, "</A> <A HREF=\"http://qa.poole.ch/?osm_id=",$polygon,"\" target=\"noname map\">m</A> <A HREF=\"allroads/",$muni_ref,".html\">all</A></td><td>", $muni_ref,"</td>"; 
 			mkdir $canton;
 			open MH, ">$canton/$muni_ref.html";
 			binmode(MH, ":utf8");
@@ -105,8 +105,7 @@ while(my $aref = $ah->fetchrow_hashref())
 		}
 
 #		roads
-#		$lh = $dbh->prepare("select distinct l.name, l.tags->'name:de' as name_de,  l.tags->'name:fr' as name_fr, l.tags->'name:it' as name_it , l.tags->'name:rm' as name_rm, l.tags->'alt_name' as alt_name,l.tags->'official_name' as official_name,l.tags->'name:left' as name_left,l.tags->'name:right' as name_right,l.tags->'short_name' as short_name from planet_osm_line l, planet_osm_polygon p where (l.highway is not NULL) and p.osm_id = $polygon and ST_Intersects(l.way,p.way)");
-		$lh = $dbh->prepare("select distinct l.name, l.tags->'name:de' as name_de,  l.tags->'name:fr' as name_fr, l.tags->'name:it' as name_it , l.tags->'name:rm' as name_rm, l.tags->'alt_name' as alt_name,l.tags->'official_name' as official_name,l.tags->'name:left' as name_left,l.tags->'name:right' as name_right,l.tags->'short_name' as short_name  from planet_osm_line l, buffered_boundaries p where (l.highway is not NULL) and p.osm_id = $polygon and ST_Intersects(l.way,p.way)");
+		$lh = $dbh->prepare("select distinct l.name, l.tags->'name:de' as name_de,  l.tags->'name:fr' as name_fr, l.tags->'name:it' as name_it , l.tags->'name:rm' as name_rm, l.tags->'alt_name' as alt_name,l.tags->'official_name' as official_name,l.tags->'name:left' as name_left,l.tags->'name:right' as name_right,l.tags->'short_name' as short_name from planet_osm_line l, buffered_boundaries p where (l.highway is not NULL) and p.osm_id = $polygon and ST_Intersects(l.way,p.way)");
 		$lh->execute();
 
 		while(my $lref = $lh->fetchrow_hashref()) 
@@ -126,7 +125,6 @@ while(my $aref = $ah->fetchrow_hashref())
 		}
 #		areas
 		print STDERR "Polygon: ",$polygon,"\n";
-#		$lh = $dbh->prepare("select distinct  l.name, l.tags->'name:de' as name_de,  l.tags->'name:fr' as name_fr, l.tags->'name:it' as name_it , l.tags->'name:rm' as name_rm , l.tags->'alt_name' as alt_name,l.tags->'official_name' as official_name,l.tags->'short_name' as short_name   from planet_osm_polygon l, planet_osm_polygon p where ((l.place is not NULL) or (l.highway is not NULL)) and p.osm_id = $polygon and not ST_IsEmpty(l.way) and ST_Intersects(l.way,p.way)");
 		$lh = $dbh->prepare("select distinct  l.name, l.tags->'name:de' as name_de,  l.tags->'name:fr' as name_fr, l.tags->'name:it' as name_it , l.tags->'name:rm' as name_rm , l.tags->'alt_name' as alt_name,l.tags->'official_name' as official_name,l.tags->'short_name' as short_name   from planet_osm_polygon l, buffered_boundaries p where ((l.place is not NULL) or (l.highway is not NULL)) and p.osm_id = $polygon and not ST_IsEmpty(l.way) and ST_Intersects(l.way,p.way)");
 		$lh->execute();
 
@@ -143,7 +141,6 @@ while(my $aref = $ah->fetchrow_hashref())
 
 			$osm_area_count++;
 		}
-#		$lh = $dbh->prepare("select distinct  l.name, l.tags->'name:de' as name_de,  l.tags->'name:fr' as name_fr, l.tags->'name:it' as name_it , l.tags->'name:rm' as name_rm, l.tags->'alt_name' as alt_name,l.tags->'official_name' as official_name,l.tags->'short_name' as short_name    from planet_osm_point l, planet_osm_polygon p where (l.place is not NULL) and p.osm_id = $polygon and ST_Intersects(l.way,p.way)");
 		$lh = $dbh->prepare("select distinct  l.name, l.tags->'name:de' as name_de,  l.tags->'name:fr' as name_fr, l.tags->'name:it' as name_it , l.tags->'name:rm' as name_rm, l.tags->'alt_name' as alt_name,l.tags->'official_name' as official_name,l.tags->'short_name' as short_name    from planet_osm_point l, buffered_boundaries p where ((l.place is not NULL)  or (l.junction is not NULL)) and p.osm_id = $polygon and ST_Intersects(l.way,p.way)");
 		$lh->execute();
 
@@ -170,7 +167,7 @@ while(my $aref = $ah->fetchrow_hashref())
 		open MH, ">$canton/$muni_ref.html";
 	}
 
-        $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref and official=1 order by name,plz4,plz2");
+        $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref and official order by name,plz4,plz2");
         $lh->execute();
 
 	my %GWR_names;
@@ -207,25 +204,20 @@ while(my $aref = $ah->fetchrow_hashref())
 		my $name_plz = "$name|$plz6";
 		my $geom = $lref->{'geom'};
 		$GWR_plz6{$name} = $plz6;
-		if ($geom eq '9801')
+		if ($geom eq 'Street')
 		{
                        	$GWR_names{$name_plz} = 'road';
 			$GWR_road_count++;
 		}
-		elsif ($geom eq '9802')
+		elsif ($geom eq 'Place')
 		{
                        	$GWR_names{$name_plz} = 'point';
 			$GWR_point_count++;
 		}
-		elsif ($geom eq '9803')
+		elsif ($geom eq 'Area')
 		{
                        	$GWR_names{$name_plz} = 'area';
 			$GWR_area_count++;
-		}
-		elsif ($geom eq '9809')
-		{
-                       	$GWR_names{$name_plz} = 'none';
-			$GWR_none_count++;
 		}
 		else
 		{
@@ -255,7 +247,7 @@ while(my $aref = $ah->fetchrow_hashref())
 				{
 					$other_match++;
 				}
-			} elsif (($GWR_type  eq 'unknown') || ($GWR_type  eq 'none')) {
+			} elsif ($GWR_type  eq 'unknown') {
 				# check if it is a OSM road
 				if ( ($osm_names{$name} eq 'road') ||  ($osm_names_de{$name} eq 'road') ||  ($osm_names_fr{$name} eq 'road') ||  ($osm_names_it{$name} eq 'road') ||  ($osm_names_rm{$name} eq 'road') || ($osm_names_alt{$name} eq 'road') ||  ($osm_names_official{$name} eq 'road') ||  ($osm_names_left{$name} eq 'road')||  ($osm_names_right{$name} eq 'road') ||  ($osm_names_short{$name} eq 'road')) {
 					$exact_type_match{$name_plz} = 1;
@@ -299,7 +291,7 @@ while(my $aref = $ah->fetchrow_hashref())
 	}
 	
 	my $typos = 0;
-        $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref and official=1 order by name,plz4,plz2");
+        $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref and official order by name,plz4,plz2");
         $lh->execute();
         while(my $lref = $lh->fetchrow_hashref()) 
 	{
@@ -498,7 +490,8 @@ while(my $aref = $ah->fetchrow_hashref())
 	{
 		print "<td class=\"grey\" align=\"right\">-</td>";
 	}
-	print "<td align=\"right\">",$typos,"</td><td align=\"right\">",$osm_road_count,"</td><td align=\"right\">",$osm_area_count,"</td><td align=\"right\">",$osm_point_count,"</td><td class=\"grey\" align=\"right\">",$osm_road_count+$osm_area_count+$osm_point_count,"</td><td align=\"right\">",$GWR_road_count,"</td><td align=\"right\">",$GWR_area_count,"</td><td align=\"right\">",$GWR_point_count,"</td><td align=\"right\">",$GWR_none_count,"</td><td align=\"right\">",$GWR_unknown_count,"</td><td class=\"grey\" align=\"right\">",$GWR_road_count+$GWR_area_count+$GWR_point_count+$GWR_none_count+$GWR_unknown_count,"</td><td align=\"right\">",$exact_count,"</td><td align=\"right\">",$exact_type_count,"</td><td align=\"right\">",$GWR_none_road_count,"</td><td align=\"right\">",$GWR_unknown_road_count,"</td></tr>\n";
+        my $GWR_total = $GWR_road_count+$GWR_area_count+$GWR_point_count+$GWR_none_count+$GWR_unknown_count;
+	print "<td align=\"right\">",$typos,"</td><td align=\"right\">",$osm_road_count,"</td><td align=\"right\">",$osm_area_count,"</td><td align=\"right\">",$osm_point_count,"</td><td class=\"grey\" align=\"right\">",$osm_road_count+$osm_area_count+$osm_point_count,"</td><td align=\"right\">",$GWR_road_count,"</td><td align=\"right\">",$GWR_area_count,"</td><td align=\"right\">",$GWR_point_count,"</td><td align=\"right\">",$GWR_none_count,"</td><td align=\"right\">",$GWR_unknown_count,"</td><td class=\"grey\" align=\"right\">",$GWR_total,"</td><td align=\"right\">",$exact_count,"</td><td align=\"right\">",$exact_type_count,"</td><td align=\"right\">",$GWR_none_road_count,"</td><td align=\"right\">",$GWR_unknown_road_count,"</td><td align=\"right\">",$GWR_total-$exact_count-$exact_type_count,"</td></tr>\n";
 
 	# insert states into DB (overall and road already calculated)
 	my $p_point = -1;
