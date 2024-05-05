@@ -194,7 +194,7 @@ while(my $aref = $ah->fetchrow_hashref())
 	print MH "</head><body><H3>",$muni_name," ",(1900+$yearOffset),"-",(1+ $month),"-",$dayOfMonth,"</H3>\n<!--#include file=\"legend.html\" -->\n<p>\n";
 	print MH "<table class=\"sortable\">\n";
 
-	print MH "<tr><th>GWR Name</th><th>GWR Type</th><th>PLZ6</th><th>Approx. Matches</th></tr>\n";
+	print MH "<tr><th>GWR Name</th><th>GWR Type</th><th>PLZ6</th><th>Approx. Matches</th><th>Location</th></tr>\n";
         while(my $lref = $lh->fetchrow_hashref()) 
 	{
 		my $plz4 = $lref->{'plz4'};
@@ -291,7 +291,7 @@ while(my $aref = $ah->fetchrow_hashref())
 	}
 	
 	my $typos = 0;
-        $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref and official order by name,plz4,plz2");
+        $lh = $dbh->prepare("select name, plz4, plz2, official, geom, round(ST_X(loc)::numeric,5) as x, round(ST_Y(loc)::numeric,5) as y from road_names where muni_ref=$muni_ref and official order by name,plz4,plz2");
         $lh->execute();
         while(my $lref = $lh->fetchrow_hashref()) 
 	{
@@ -301,6 +301,8 @@ while(my $aref = $ah->fetchrow_hashref())
 		my $name = $lref->{'name'};
 		my $geom = $lref->{'geom'};
 		my $name_plz = "$name|$plz6";
+                my $x = $lref->{'x'};
+                my $y = $lref->{'y'};
 		if ((! exists $exact_type_match{$name_plz}) && (! exists $exact_match{$name_plz}))
 		{
 			print MH "<tr><td>",$name,"</td><td>",$GWR_names{$name_plz},"</td><td>",$plz6,"</td><td>\n";
@@ -438,7 +440,11 @@ while(my $aref = $ah->fetchrow_hashref())
 					}
 				}
 			}
-			print MH "</td></tr>\n";
+			print MH "</td><td><a target=\"_blank\" href=\"https://openstreetmap.org/";
+                        print MH "?mlat=",$y,"&mlon=",$x;
+                        print MH "#map=17/",$y,"/",$x;
+                        print MH "\">",$y," / ",$x,"</a>"; 
+                        print MH "</td></tr>\n";
 		}
         }
 	print MH "</table></body></html>\n";
