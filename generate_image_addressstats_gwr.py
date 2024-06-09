@@ -24,9 +24,9 @@ if __name__ == "__main__":
     try:
         mapfile = os.environ['MAPNIK_MAP_FILE']
     except KeyError:
-        mapfile = "/home/simon/osm/GWR/namestats_overall.xml"
+        mapfile = "/home/simon/osm/GWR/addressstats.xml"
     
-    map_uri = "/var/www/qa/ch-roads/namestats_overall.png"
+    map_uri = "addressstats_gwr.png"
 
     #---------------------------------------------------
     #  Change this to the bounding box you want
