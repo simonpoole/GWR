@@ -26,7 +26,7 @@ while(my $aref = $ah->fetchrow_hashref())
 	open MH, ">allroads/$muni_ref.html";
         binmode(MH, ":utf8");
 
-        my $lh = $dbh->prepare("select name, plz4, plz2, official, geom from road_names where muni_ref=$muni_ref order by name,plz4,plz2");
+        my $lh = $dbh->prepare("select name, plz4, plz2, official, geom , round(ST_X(loc)::numeric,5) as x, round(ST_Y(loc)::numeric,5) as y from road_names where muni_ref=$muni_ref order by name,plz4,plz2");
         $lh->execute();
 
 	my %GWR_names;
@@ -37,7 +37,7 @@ while(my $aref = $ah->fetchrow_hashref())
 	print MH "</head><body><H3>Municipality ref ",$muni_ref,"</H3>\n<p>\n";
 	print MH "<table class=\"sortable\">\n";
 
-	print MH "<tr><th>GWR Name</th><th>GWR Type</th><th>PLZ6</th><th></th></tr>\n";
+	print MH "<tr><th>GWR Name</th><th>GWR Type</th><th>PLZ6</th><th>Status</th><th></th></tr>\n";
         while(my $lref = $lh->fetchrow_hashref()) 
 	{
 		my $plz4 = $lref->{'plz4'};
@@ -46,27 +46,38 @@ while(my $aref = $ah->fetchrow_hashref())
 		my $name = $lref->{'name'};
 		my $geom = $lref->{'geom'};
 	        my $official = $lref->{'official'};
+                my $x = $lref->{'x'};
+                my $y = $lref->{'y'};
+
 		$GWR_plz6{$name} = $plz6;
 		print MH "<tr><td>",$name,"</td><td>"; 
-		if ($geom eq '9801') {
-                       	print MH 'road';
-		} elsif ($geom eq '9802') {
-                       	print MH 'point';
-		} elsif ($geom eq '9803') {
-                       	print MH 'area';
-		} elsif ($geom eq '9809') {
-                       	print MH 'none';
-		} else {
-                       	print MH 'unknown';
-		}
+		if ($geom eq 'Street')
+                {
+			print MH "road"; 
+                }
+                elsif ($geom eq 'Place')
+                {
+			print MH "point"; 
+                }
+                elsif ($geom eq 'Area')
+                {
+			print MH "area"; 
+                }
+                else
+                {
+			print MH "unknown"; 
+                }
+
 		print MH  "</td><td>",$plz6,"</td><td>";
-		if ($official==1) {
-			print MH '';
-		} elsif ($official==11) {
-			print MH 'no addresses';
+		if ($official) {
+			print MH 'in use';
 		} else {
-			print MH 'not used ';
+			print MH 'not in use';
 		}
+                print MH "</td><td><a target=\"_blank\" href=\"https://openstreetmap.org/";
+                print MH "?mlat=",$y,"&mlon=",$x;
+                print MH "#map=17/",$y,"/",$x;
+                print MH "\">",$y," / ",$x,"</a>";
 		print MH  "</td></tr>\n"; 
 	}
 	
