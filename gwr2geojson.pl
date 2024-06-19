@@ -33,20 +33,25 @@ my $bh  = $dbh->prepare("select strname, deinr, plz4, plzname, ST_AsGeoJSON(loc)
 $bh->execute();
 header($out);
 header($outall);
-my $bref = $bh->fetchrow_hashref();
-while($bref)
-{
+my $first = 1;
+my $firstAll = 1;
+my $bref;
+while($bref =  $bh->fetchrow_hashref()) {
 	my $housenumber = $bref->{'deinr'};
+	if ($firstAll) {
+                $firstAll = 0;
+        } else {
+        	print $outall ",\n";
+        }
         output($outall, $bref, $housenumber);
         my $realNumber = not $housenumber =~ /.*\..*/;
 	if ($realNumber) {
+		if ($first) {
+                        $first = 0;
+		} else {
+            		print $out ",\n";
+        	}
         	output($out, $bref, $housenumber);
-	}
-        if ($bref = $bh->fetchrow_hashref()) {
-            print $outall ",\n";
-            if ($realNumber) {
-            	print $out ",\n";
-            }
 	}
 }
 print $outall "]}\n";
