@@ -29,7 +29,7 @@ while(my $aref = $ah->fetchrow_hashref())
 	$road_geoms{$aref->{'esid'}} = $aref->{'strtype'};
 }
 
-my $bh  = $dbh->prepare("select strname, deinr, plz4, plzname, ST_AsGeoJSON(loc) as geom, gkat, gklas, esid from gwr_addresses g, planet_osm_polygon p where p.boundary='administrative' and p.admin_level='8' and tags->'swisstopo:BFS_NUMMER'='".$muni_ref."' and ST_Contains(ST_Transform(p.way,4326),g.loc)");
+my $bh  = $dbh->prepare("select strname, deinr, plz4, plzname, ST_AsGeoJSON(loc) as geom, gkat, gklas, esid from gwr_addresses g, planet_osm_polygon p where p.boundary='administrative' and p.admin_level='8' and tags->'swisstopo:BFS_NUMMER'='".$muni_ref."' and ST_Contains(ST_Transform(p.way,4326),g.loc) and g.gstat=1004");
 $bh->execute();
 header($out);
 header($outall);
@@ -47,7 +47,7 @@ while($bref =  $bh->fetchrow_hashref()) {
         }
         output($outall, $bref, $housenumber);
         my $realNumber = not $housenumber =~ /.*\..*/;
-	if ($realNumber and $categorie != 1010 and $categorie != 1080 and $building_class != 1242) {
+	if ($realNumber and $categorie != 1010 and $categorie != 1080 and $building_class != 1242 and $building_class != 1252) {
 		if ($first) {
                         $first = 0;
 		} else {
