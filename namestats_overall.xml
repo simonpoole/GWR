@@ -63,7 +63,7 @@
     <StyleName>muni_p</StyleName>
     <Datasource>
        <Parameter name="type"><![CDATA[postgis]]></Parameter>
-       <Parameter name="table"><![CDATA[(with schweiz as (select way from planet_osm_polygon  where osm_id=-51701) select p.name, p.way  as  pw ,m.match_overall from planet_osm_polygon p, muni_name_stats m, schweiz where admin_level = '8' and p.tags->'swisstopo:BFS_NUMMER'=cast(m.muni_ref as text) and p.way @ schweiz.way) as data]]></Parameter>
+       <Parameter name="table"><![CDATA[(with schweiz as (select way from planet_osm_polygon  where osm_id=-51701) select p.name, p.way  as  pw ,m.match_overall from planet_osm_polygon p, muni_name_stats m, schweiz where boundary='administrative' and admin_level = '8' and p.tags->'swisstopo:BFS_NUMMER'=cast(m.muni_ref as text) and p.way @ schweiz.way) as data]]></Parameter>
        <Parameter name="extent"><![CDATA[646440.68,5736119.69,1194143.11,6110057.76]]></Parameter>
        <Parameter name="key_field"><![CDATA[]]></Parameter>
        <Parameter name="geometry_field"><![CDATA[pw]]></Parameter>
