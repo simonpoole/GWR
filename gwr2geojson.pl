@@ -29,7 +29,7 @@ while(my $aref = $ah->fetchrow_hashref())
 	$road_geoms{$aref->{'esid'}} = $aref->{'strtype'};
 }
 
-my $bh  = $dbh->prepare("select strname, deinr, plz4, plzname, ST_AsGeoJSON(loc) as geom, gkat, gklas, esid from gwr_addresses g, planet_osm_polygon p where p.boundary='administrative' and p.admin_level='8' and tags->'swisstopo:BFS_NUMMER'='".$muni_ref."' and ST_Contains(ST_Transform(p.way,4326),g.loc) and g.gstat=1004 and doffadr");
+my $bh  = $dbh->prepare("select strname, deinr, plz4, plzname, ST_AsGeoJSON(loc) as geom, gkat, gklas, esid from gwr_addresses g, planet_osm_polygon p where p.boundary='administrative' and p.admin_level='8' and tags->'swisstopo:BFS_NUMMER'='".$muni_ref."' and ST_Contains(ST_Transform(p.way,4326),g.loc) and g.gstat=1004 and (doffadr or gdekt='GR' or gdekt='VS')");
 $bh->execute();
 header($out);
 header($outall);

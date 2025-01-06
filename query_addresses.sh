@@ -1,7 +1,7 @@
 #! /bin/bash -v
 
 echo processing BFS $1
-pgsql2shp -g loc -f /tmp/$1 gis "select EGID, EGAID, GDENR, GDENAME, STRNAME, DEINR, PLZ4, PLZZ, PLZNAME, STRSP, loc from gwr_addresses g, planet_osm_polygon p where p.boundary='administrative' and p.admin_level='8' and tags->'swisstopo:BFS_NUMMER'='$1' and ST_Contains(ST_Transform(p.way,4326),g.loc) and DEINR is not NULL and NOT DEINR LIKE('%.%') and doffadr and g.gstat = 1004 and NOT (gkat = 1010 or gkat = 1080 or gklas = 1242 or gklas = 1252)"
+pgsql2shp -g loc -f /tmp/$1 gis "select EGID, EGAID, GDENR, GDENAME, STRNAME, DEINR, PLZ4, PLZZ, PLZNAME, STRSP, loc from gwr_addresses g, planet_osm_polygon p where p.boundary='administrative' and p.admin_level='8' and tags->'swisstopo:BFS_NUMMER'='$1' and ST_Contains(ST_Transform(p.way,4326),g.loc) and DEINR is not NULL and NOT DEINR LIKE('%.%') and (doffadr or gdekt='GR' or gdekt='VS') and g.gstat = 1004 and NOT (gkat = 1010 or gkat = 1080 or gklas = 1242 or gklas = 1252)"
 cd /tmp
 rm -f /var/www/qa/addresses/GWR/$1.zip
 zip /var/www/qa/addresses/GWR/$1.zip $1.*
