@@ -5,44 +5,40 @@
 
 <Style name="muni_p" filter-mode="first" >
   <Rule>
-    <Filter>([match_road] &gt;= 80) and ([match_road] &lt; 90)</Filter>
+    <Filter>[match_road] &gt;= 99</Filter>
+    <PolygonSymbolizer fill="#889900" />
+  </Rule>
+  <Rule>
+    <Filter>([match_road] &gt;= 95) and ([match_road] &lt; 99)</Filter>
     <PolygonSymbolizer fill="#ff8800" />
   </Rule>
   <Rule>
-    <Filter>([match_road] &gt;= 70) and ([match_road] &lt; 80)</Filter>
+    <Filter>([match_road] &gt;= 90) and ([match_road] &lt; 95)</Filter>
     <PolygonSymbolizer fill="#ff7700" />
   </Rule>
   <Rule>
-    <Filter>([match_road] &gt;= 60) and ([match_road] &lt; 70)</Filter>
+    <Filter>([match_road] &gt;= 85) and ([match_road] &lt; 90)</Filter>
     <PolygonSymbolizer fill="#ff6600" />
   </Rule>
   <Rule>
-    <Filter>([match_road] &gt;= 50) and ([match_road] &lt; 60)</Filter>
+    <Filter>([match_road] &gt;= 80) and ([match_road] &lt; 85)</Filter>
     <PolygonSymbolizer fill="#ff5500" />
   </Rule>
   <Rule>
-    <Filter>([match_road] &gt;= 40) and ([match_road] &lt; 50)</Filter>
+    <Filter>([match_road] &gt;= 75) and ([match_road] &lt; 80)</Filter>
     <PolygonSymbolizer fill="#ee0000" />
   </Rule>
   <Rule>
-    <Filter>([match_road] &gt;= 30) and ([match_road] &lt; 40)</Filter>
+    <Filter>([match_road] &gt;= 70) and ([match_road] &lt; 75)</Filter>
     <PolygonSymbolizer fill="#dd0000" />
   </Rule>
   <Rule>
-    <Filter>([match_road] &gt;= 20) and ([match_road] &lt; 30)</Filter>
+    <Filter>([match_road] &gt;= 65) and ([match_road] &lt; 70)</Filter>
     <PolygonSymbolizer fill="#cc0000" />
   </Rule>
   <Rule>
-    <Filter>([match_road] &gt;= 10) and ([match_road] &lt; 20)</Filter>
+    <Filter>([match_road] &gt;= 0) and ([match_road] &lt; 65)</Filter>
     <PolygonSymbolizer fill="#bb0000" />
-  </Rule>
-  <Rule>
-    <Filter>([match_road] &gt;= 0) and ([match_road] &lt; 10)</Filter>
-    <PolygonSymbolizer fill="#aa0000" />
-  </Rule>
-  <Rule>
-    <Filter>([match_road] &gt;= 90)</Filter>
-    <PolygonSymbolizer fill="#889900" />
   </Rule>
   <Rule>
     <Filter>([match_road] = -1)</Filter>

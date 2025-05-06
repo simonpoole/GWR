@@ -5,44 +5,40 @@
 
 <Style name="muni_p" filter-mode="first" >
   <Rule>
-    <Filter>([match_overall] &gt;= 80) and ([match_overall] &lt; 90)</Filter>
+    <Filter>[match_overall] &gt;= 99</Filter>
+    <PolygonSymbolizer fill="#889900" />
+  </Rule>
+  <Rule>
+    <Filter>([match_overall] &gt;= 95) and ([match_overall] &lt; 99)</Filter>
     <PolygonSymbolizer fill="#ff8800" />
   </Rule>
   <Rule>
-    <Filter>([match_overall] &gt;= 70) and ([match_overall] &lt; 80)</Filter>
+    <Filter>([match_overall] &gt;= 90) and ([match_overall] &lt; 95)</Filter>
     <PolygonSymbolizer fill="#ff7700" />
   </Rule>
   <Rule>
-    <Filter>([match_overall] &gt;= 60) and ([match_overall] &lt; 70)</Filter>
+    <Filter>([match_overall] &gt;= 85) and ([match_overall] &lt; 90)</Filter>
     <PolygonSymbolizer fill="#ff6600" />
   </Rule>
   <Rule>
-    <Filter>([match_overall] &gt;= 50) and ([match_overall] &lt; 60)</Filter>
+    <Filter>([match_overall] &gt;= 80) and ([match_overall] &lt; 85)</Filter>
     <PolygonSymbolizer fill="#ff5500" />
   </Rule>
   <Rule>
-    <Filter>([match_overall] &gt;= 40) and ([match_overall] &lt; 50)</Filter>
+    <Filter>([match_overall] &gt;= 75) and ([match_overall] &lt; 80)</Filter>
     <PolygonSymbolizer fill="#ee0000" />
   </Rule>
   <Rule>
-    <Filter>([match_overall] &gt;= 30) and ([match_overall] &lt; 40)</Filter>
+    <Filter>([match_overall] &gt;= 70) and ([match_overall] &lt; 75)</Filter>
     <PolygonSymbolizer fill="#dd0000" />
   </Rule>
   <Rule>
-    <Filter>([match_overall] &gt;= 20) and ([match_overall] &lt; 30)</Filter>
+    <Filter>([match_overall] &gt;= 65) and ([match_overall] &lt; 70)</Filter>
     <PolygonSymbolizer fill="#cc0000" />
   </Rule>
   <Rule>
-    <Filter>([match_overall] &gt;= 10) and ([match_overall] &lt; 20)</Filter>
+    <Filter>([match_overall] &gt;= 0) and ([match_overall] &lt; 65)</Filter>
     <PolygonSymbolizer fill="#bb0000" />
-  </Rule>
-  <Rule>
-    <Filter>([match_overall] &gt;= 0) and ([match_overall] &lt; 10)</Filter>
-    <PolygonSymbolizer fill="#aa0000" />
-  </Rule>
-  <Rule>
-    <Filter>([match_overall] &gt;= 90)</Filter>
-    <PolygonSymbolizer fill="#889900" />
   </Rule>
   <Rule>
     <Filter>([match_overall] = -1)</Filter>

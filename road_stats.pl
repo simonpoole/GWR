@@ -455,11 +455,11 @@ while(my $aref = $ah->fetchrow_hashref())
 	{
 		$p_overall = (($exact_type_count + $exact_count) / ($GWR_road_count + $GWR_area_count + $GWR_point_count + $GWR_none_count + $GWR_unknown_count)*100); 
 		$p_overall = sprintf "%.0f", $p_overall;
-		if ($p_overall > 90)
+		if ($p_overall > 99)
 		{
 			print	"<td class=\"green\" align=\"right\">",
 		}
-		elsif ($p_overall > 80)
+		elsif ($p_overall > 90)
 		{
 			print	"<td class=\"orange\" align=\"right\">",
 		}
@@ -478,11 +478,11 @@ while(my $aref = $ah->fetchrow_hashref())
 	{
 		$p_road = (($road_match + $unexact_road_match)/ $GWR_road_count)*100; 
 		$p_road = sprintf "%.0f", $p_road;
-		if ($p_road > 90)
+		if ($p_road > 99)
 		{
 			print	"<td class=\"green\" align=\"right\">",
 		}
-		elsif ($p_road > 80)
+		elsif ($p_road > 90)
 		{
 			print	"<td class=\"orange\" align=\"right\">",
 		}
